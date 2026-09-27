@@ -1,0 +1,10 @@
+[package]
+name = "reacon-stream-conformance"
+version = "0.0.0"
+edition = "2021"
+publish = false
+[dependencies]
+reacon-sdk = { path = "/work" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+futures-util = "=0.3.34"
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json"] }
