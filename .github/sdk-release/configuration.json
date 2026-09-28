@@ -3,5 +3,5 @@
   "family": "rust",
   "repository": "reacon-io/reacon-rust",
   "repositoryId": 1390808889,
-  "visibility": "private"
+  "visibility": "public"
 }
