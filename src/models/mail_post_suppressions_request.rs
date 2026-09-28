@@ -30,13 +30,15 @@ impl MailPostSuppressionsRequest {
 /// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Scope {
+    #[serde(rename = "email")]
+    Email,
     #[serde(rename = "domain")]
     Domain,
 }
 
 impl Default for Scope {
     fn default() -> Scope {
-        Self::Domain
+        Self::Email
     }
 }
 

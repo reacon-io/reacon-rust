@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailPostCampaignsByCampaignIdLaunchResponse200AnyOf {
     #[serde(rename = "campaign")]
-    pub campaign: Box<models::MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign>,
+    pub campaign: Box<models::MailPostCampaignsByCampaignIdLaunchResponse200Campaign>,
     #[serde(rename = "draft")]
     pub draft: Box<models::MailCampaignDraftRecord>,
     #[serde(rename = "sequences")]
@@ -22,7 +22,7 @@ pub struct MailPostCampaignsByCampaignIdLaunchResponse200AnyOf {
 }
 
 impl MailPostCampaignsByCampaignIdLaunchResponse200AnyOf {
-    pub fn new(campaign: models::MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign, draft: models::MailCampaignDraftRecord, sequences: Vec<serde_json::Value>) -> MailPostCampaignsByCampaignIdLaunchResponse200AnyOf {
+    pub fn new(campaign: models::MailPostCampaignsByCampaignIdLaunchResponse200Campaign, draft: models::MailCampaignDraftRecord, sequences: Vec<serde_json::Value>) -> MailPostCampaignsByCampaignIdLaunchResponse200AnyOf {
         MailPostCampaignsByCampaignIdLaunchResponse200AnyOf {
             campaign: Box::new(campaign),
             draft: Box::new(draft),

@@ -13,8 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailGetPortfolioResponse200 {
-    #[serde(rename = "portfolio")]
-    pub portfolio: Box<models::MailMailPortfolio>,
+    #[serde(rename = "portfolio", deserialize_with = "Option::deserialize")]
+    pub portfolio: Option<Box<models::MailMailPortfolio>>,
     #[serde(rename = "suppressions")]
     pub suppressions: Vec<models::MailMailPortfolioSuppression>,
     #[serde(rename = "teams")]
@@ -22,9 +22,9 @@ pub struct MailGetPortfolioResponse200 {
 }
 
 impl MailGetPortfolioResponse200 {
-    pub fn new(portfolio: models::MailMailPortfolio, suppressions: Vec<models::MailMailPortfolioSuppression>, teams: Vec<models::MailMailPortfolioTeam>) -> MailGetPortfolioResponse200 {
+    pub fn new(portfolio: Option<models::MailMailPortfolio>, suppressions: Vec<models::MailMailPortfolioSuppression>, teams: Vec<models::MailMailPortfolioTeam>) -> MailGetPortfolioResponse200 {
         MailGetPortfolioResponse200 {
-            portfolio: Box::new(portfolio),
+            portfolio: portfolio.map(Box::new),
             suppressions,
             teams,
         }

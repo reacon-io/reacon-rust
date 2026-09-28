@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign {
+pub struct MailPostCampaignsByCampaignIdLaunchResponse200Campaign {
     #[serde(rename = "createdAt")]
     pub created_at: String,
     #[serde(rename = "id")]
@@ -35,9 +35,9 @@ pub struct MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign {
     pub updated_at: String,
 }
 
-impl MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign {
-    pub fn new(created_at: String, id: String, message_counts: models::MailCampaignProgressMessageCounts, name: String, recipient_count: f64, sequence_run_ids: Vec<String>, status: String, tenant_id: String, total_messages: f64, updated_at: String) -> MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign {
-        MailPostCampaignsByCampaignIdLaunchResponse200AnyOfCampaign {
+impl MailPostCampaignsByCampaignIdLaunchResponse200Campaign {
+    pub fn new(created_at: String, id: String, message_counts: models::MailCampaignProgressMessageCounts, name: String, recipient_count: f64, sequence_run_ids: Vec<String>, status: String, tenant_id: String, total_messages: f64, updated_at: String) -> MailPostCampaignsByCampaignIdLaunchResponse200Campaign {
+        MailPostCampaignsByCampaignIdLaunchResponse200Campaign {
             created_at,
             id,
             message_counts: Box::new(message_counts),
