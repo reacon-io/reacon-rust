@@ -1,6 +1,6 @@
 [package]
 name = "reacon-sdk"
-version = "0.1.0-beta.1"
+version = "0.1.0-beta.4"
 authors = ["Reacon <achazal@reacon.io>"]
 description = "Official Reacon API client for Rust"
 homepage = "https://reacon.io"
@@ -8,6 +8,7 @@ repository = "https://github.com/reacon-io/reacon-rust"
 documentation = "https://docs.reacon.io/sdks"
 license = "Apache-2.0"
 edition = "2021"
+rust-version = "1.88"
 
 [dependencies]
 async-stream = "=0.3.6"
