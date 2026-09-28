@@ -12,19 +12,48 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 /// IntegrationCapabilityResponseOutput : Null in preview mode; otherwise the result for the selected capability.
-/// Null in preview mode; otherwise the result for the selected capability.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum IntegrationCapabilityResponseOutput {
-    CapabilityEmailFound(models::CapabilityEmailFound),
-    CapabilityEmailVerified(models::CapabilityEmailVerified),
-    CapabilityDomainSearch(models::CapabilityDomainSearch),
-    Object(serde_json::Value),
+#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+pub struct IntegrationCapabilityResponseOutput {
+    #[serde(rename = "confidence")]
+    pub confidence: f64,
+    #[serde(rename = "email")]
+    pub email: String,
+    #[serde(rename = "freshness")]
+    pub freshness: String,
+    #[serde(rename = "status")]
+    pub status: String,
+    #[serde(rename = "checkedAt")]
+    pub checked_at: String,
+    #[serde(rename = "details")]
+    pub details: models::CapabilityEmailVerifiedDetails,
+    #[serde(rename = "score")]
+    pub score: f64,
+    #[serde(rename = "sources")]
+    pub sources: i32,
+    #[serde(rename = "contacts")]
+    pub contacts: Vec<models::CapabilityDomainSearchContactsInner>,
+    #[serde(rename = "domain")]
+    pub domain: String,
+    #[serde(rename = "organization", skip_serializing_if = "Option::is_none")]
+    pub organization: Option<String>,
 }
 
-impl Default for IntegrationCapabilityResponseOutput {
-    fn default() -> Self {
-        Self::CapabilityEmailFound(Default::default())
+impl IntegrationCapabilityResponseOutput {
+    /// Null in preview mode; otherwise the result for the selected capability.
+    pub fn new(confidence: f64, email: String, freshness: String, status: String, checked_at: String, details: models::CapabilityEmailVerifiedDetails, score: f64, sources: i32, contacts: Vec<models::CapabilityDomainSearchContactsInner>, domain: String) -> IntegrationCapabilityResponseOutput {
+        IntegrationCapabilityResponseOutput {
+            confidence,
+            email,
+            freshness,
+            status,
+            checked_at,
+            details,
+            score,
+            sources,
+            contacts,
+            domain,
+            organization: None,
+        }
     }
 }
 

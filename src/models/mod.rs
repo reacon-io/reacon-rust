@@ -242,6 +242,8 @@ pub mod integration_capability_response;
 pub use self::integration_capability_response::IntegrationCapabilityResponse;
 pub mod integration_capability_response_output;
 pub use self::integration_capability_response_output::IntegrationCapabilityResponseOutput;
+pub mod integration_capability_response_output_non_null;
+pub use self::integration_capability_response_output_non_null::IntegrationCapabilityResponseOutputNonNull;
 pub mod integration_connection;
 pub use self::integration_connection::IntegrationConnection;
 pub mod integration_connection_health;

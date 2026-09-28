@@ -12,6 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProductDiscoverCompaniesInput {
     #[serde(rename = "industry", skip_serializing_if = "Option::is_none")]
     pub industry: Option<String>,

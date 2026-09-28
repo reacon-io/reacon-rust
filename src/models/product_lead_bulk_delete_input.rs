@@ -12,6 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProductLeadBulkDeleteInput {
     #[serde(rename = "idempotencyKey")]
     pub idempotency_key: String,

@@ -29,14 +29,14 @@ pub struct IntegrationCapabilityResponse {
     /// Known values: preview, live. Clients preserve future values.
     #[serde(rename = "mode")]
     pub mode: String,
-    #[serde(rename = "output")]
-    pub output: Box<models::IntegrationCapabilityResponseOutput>,
+    #[serde(rename = "output", deserialize_with = "Option::deserialize")]
+    pub output: Option<Box<models::IntegrationCapabilityResponseOutputNonNull>>,
     #[serde(rename = "replay")]
     pub replay: bool,
 }
 
 impl IntegrationCapabilityResponse {
-    pub fn new(actual_credits: i32, capability: String, charged: bool, emulated: bool, estimated_credits: i32, execution_id: String, mode: String, output: models::IntegrationCapabilityResponseOutput, replay: bool) -> IntegrationCapabilityResponse {
+    pub fn new(actual_credits: i32, capability: String, charged: bool, emulated: bool, estimated_credits: i32, execution_id: String, mode: String, output: Option<models::IntegrationCapabilityResponseOutputNonNull>, replay: bool) -> IntegrationCapabilityResponse {
         IntegrationCapabilityResponse {
             actual_credits,
             capability,
@@ -45,7 +45,7 @@ impl IntegrationCapabilityResponse {
             estimated_credits,
             execution_id,
             mode,
-            output: Box::new(output),
+            output: output.map(Box::new),
             replay,
         }
     }

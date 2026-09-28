@@ -12,6 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct MailPostCadencesRequestNodesInnerAnyOf6 {
     #[serde(rename = "id")]
     pub id: String,

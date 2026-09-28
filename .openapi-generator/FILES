@@ -142,6 +142,7 @@ src/models/inspect_excel_workbook_request.rs
 src/models/inspect_google_sheet_request.rs
 src/models/integration_capability_response.rs
 src/models/integration_capability_response_output.rs
+src/models/integration_capability_response_output_non_null.rs
 src/models/integration_connection.rs
 src/models/integration_connection_health.rs
 src/models/integration_connection_list.rs
