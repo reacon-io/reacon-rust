@@ -12,6 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProductSequenceRecipientsListInput {
     #[serde(rename = "sequenceId")]
     pub sequence_id: uuid::Uuid,

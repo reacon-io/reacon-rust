@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(tag = "tool")]
+#[serde(untagged)]
 pub enum ProductToolExecution {
     #[serde(rename="discover_companies")]
     DiscoverCompanies(Box<models::ProductDiscoverCompaniesExecution>),

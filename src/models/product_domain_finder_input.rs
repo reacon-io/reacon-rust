@@ -12,6 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProductDomainFinderInput {
     /// The server applies trim before validating {\"type\":\"string\",\"minLength\":1,\"maxLength\":500}.
     #[serde(rename = "company")]
