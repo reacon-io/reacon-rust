@@ -19,19 +19,19 @@ pub struct MailPostAnalyticsExportResponse200 {
     pub content_type: ContentType,
     #[serde(rename = "filename")]
     pub filename: String,
-    #[serde(rename = "nextCursor")]
-    pub next_cursor: Box<models::MailPostAnalyticsExportResponse200NextCursor>,
+    #[serde(rename = "nextCursor", deserialize_with = "Option::deserialize")]
+    pub next_cursor: Option<Box<models::MailPostAnalyticsExportResponse200NextCursor>>,
     #[serde(rename = "rowCount")]
     pub row_count: f64,
 }
 
 impl MailPostAnalyticsExportResponse200 {
-    pub fn new(content: String, content_type: ContentType, filename: String, next_cursor: models::MailPostAnalyticsExportResponse200NextCursor, row_count: f64) -> MailPostAnalyticsExportResponse200 {
+    pub fn new(content: String, content_type: ContentType, filename: String, next_cursor: Option<models::MailPostAnalyticsExportResponse200NextCursor>, row_count: f64) -> MailPostAnalyticsExportResponse200 {
         MailPostAnalyticsExportResponse200 {
             content,
             content_type,
             filename,
-            next_cursor: Box::new(next_cursor),
+            next_cursor: if let Some(x) = next_cursor {Some(Box::new(x))} else {None},
             row_count,
         }
     }
