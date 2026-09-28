@@ -10,9 +10,9 @@
 
 
 use reqwest;
-use serde::{Deserialize, Serialize, de::Error as _};
-use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use serde::{Deserialize, Serialize};
+use crate::models;
+use super::{Error, configuration};
 
 /// struct for passing parameters to the method [`list_companies`]
 #[derive(Clone, Debug)]
@@ -81,28 +81,8 @@ pub async fn list_companies(configuration: &configuration::Configuration, params
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CompanyList`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::CompanyList`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<ListCompaniesError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 

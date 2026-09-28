@@ -10,9 +10,9 @@
 
 
 use reqwest;
-use serde::{Deserialize, Serialize, de::Error as _};
-use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use serde::{Deserialize, Serialize};
+use crate::models;
+use super::{Error, configuration};
 
 /// struct for passing parameters to the method [`get_domain_catch_all`]
 #[derive(Clone, Debug)]
@@ -91,29 +91,9 @@ pub async fn get_domain_catch_all(configuration: &configuration::Configuration, 
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::DomainCatchAll`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::DomainCatchAll`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<GetDomainCatchAllError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Returns the normalized company context and up to ten jobs. company is null when no company context exists.
@@ -135,29 +115,9 @@ pub async fn get_domain_company_context(configuration: &configuration::Configura
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::DomainCompanyContext`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::DomainCompanyContext`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<GetDomainCompanyContextError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Returns personal, generic and total email counts for the domain. Authenticate with X-API-Key.
@@ -179,28 +139,8 @@ pub async fn get_domain_counts(configuration: &configuration::Configuration, par
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::DomainCounts`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::DomainCounts`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<GetDomainCountsError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 

@@ -10,9 +10,9 @@
 
 
 use reqwest;
-use serde::{Deserialize, Serialize, de::Error as _};
-use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use serde::{Deserialize, Serialize};
+use crate::models;
+use super::{Error, configuration};
 
 /// struct for passing parameters to the method [`list_name_patterns`]
 #[derive(Clone, Debug)]
@@ -88,29 +88,9 @@ pub async fn list_name_patterns(configuration: &configuration::Configuration, pa
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::NamePatternsResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::NamePatternsResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<ListNamePatternsError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Verifies candidate addresses built from sanitized first and last names. JSON returns patterns, globalStages and results. With Accept: text/event-stream, events contain stages or individual pattern verdicts; ordinary completion is clean EOF, with no aggregate final marker. When no candidates can be built, the stream instead emits a result envelope and ends. Errors can describe individual candidates; an error event is not universally terminal. The operation may consume credits; never reconnect or replay automatically.
@@ -145,28 +125,8 @@ pub async fn verify_name(configuration: &configuration::Configuration, params: V
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::NameVerificationResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::NameVerificationResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<VerifyNameError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 

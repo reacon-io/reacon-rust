@@ -10,9 +10,9 @@
 
 
 use reqwest;
-use serde::{Deserialize, Serialize, de::Error as _};
-use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use serde::{Deserialize, Serialize};
+use crate::models;
+use super::{Error, configuration};
 
 /// struct for passing parameters to the method [`verify_batch`]
 #[derive(Clone, Debug)]
@@ -77,29 +77,9 @@ pub async fn verify_batch(configuration: &configuration::Configuration, params: 
     req_builder = req_builder.json(&params.batch_verification_request);
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BatchVerificationResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::BatchVerificationResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<VerifyBatchError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Returns a final JSON aggregate by default. Accept: text/event-stream selects a finite stream of unnamed data events. Events carry a stage, state, result or error; there is no kind field or [DONE] marker on this endpoint. A result or error is terminal. Verification may consume credits and must not be automatically retried or reconnected.
@@ -128,28 +108,8 @@ pub async fn verify_email(configuration: &configuration::Configuration, params: 
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::VerificationResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::VerificationResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<VerifyEmailError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 

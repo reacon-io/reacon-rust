@@ -10,9 +10,9 @@
 
 
 use reqwest;
-use serde::{Deserialize, Serialize, de::Error as _};
-use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use serde::{Deserialize, Serialize};
+use crate::models;
+use super::{Error, configuration};
 
 /// struct for passing parameters to the method [`create_automation_hook`]
 #[derive(Clone, Debug)]
@@ -111,29 +111,9 @@ pub async fn create_automation_hook(configuration: &configuration::Configuration
     req_builder = req_builder.json(&params.create_automation_hook_request);
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AutomationHookCreated`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::AutomationHookCreated`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<CreateAutomationHookError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Creates a signing identity for Segment-origin requests. The response contains a secret and is marked Cache-Control: no-store. Store the secret securely and redact it from recordings.
@@ -156,29 +136,9 @@ pub async fn create_segment_installation(configuration: &configuration::Configur
     req_builder = req_builder.json(&params.create_segment_installation_request);
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SegmentInstallationCreated`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::SegmentInstallationCreated`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<CreateSegmentInstallationError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Deletes a subscription in the API key team. Returns 204 without a body or 404 if no subscription matches.
@@ -200,18 +160,9 @@ pub async fn delete_automation_hook(configuration: &configuration::Configuration
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(())
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<DeleteAutomationHookError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.no_content()
 }
 
 /// Deletes the installation within the API key team. Returns 204 with no body or 404 if no installation matches.
@@ -233,17 +184,8 @@ pub async fn delete_segment_installation(configuration: &configuration::Configur
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-
-    if !status.is_client_error() && !status.is_server_error() {
-        Ok(())
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<DeleteSegmentInstallationError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.no_content()
 }
 

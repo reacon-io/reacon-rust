@@ -10,9 +10,9 @@
 
 
 use reqwest;
-use serde::{Deserialize, Serialize, de::Error as _};
-use crate::{apis::ResponseContent, models};
-use super::{Error, configuration, ContentType};
+use serde::{Deserialize, Serialize};
+use crate::models;
+use super::{Error, configuration};
 
 /// struct for passing parameters to the method [`create_lead`]
 #[derive(Clone, Debug)]
@@ -167,29 +167,9 @@ pub async fn create_lead(configuration: &configuration::Configuration, params: C
     req_builder = req_builder.json(&params.create_lead_request);
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CreateLeadResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::CreateLeadResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<CreateLeadError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Deletes a lead visible to the authenticated team and returns a success envelope. A repeated delete can return 404.
@@ -211,29 +191,9 @@ pub async fn delete_lead(configuration: &configuration::Configuration, params: D
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::DeleteLeadResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::DeleteLeadResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<DeleteLeadError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Exports leads selected by inclusion/exclusion scopes and selected/deselected IDs. The body format field selects a JSON array (default) or text/csv attachment. Oversized selections return 413. Selection scopes must contain at least one item. No automatic replay.
@@ -244,47 +204,16 @@ pub async fn export_leads(configuration: &configuration::Configuration, params: 
     let resp = export_leads_response(configuration, params).await?;
 
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `Vec&lt;models::LeadExportInner&gt;`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `Vec&lt;models::LeadExportInner&gt;`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<ExportLeadsError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Download CSV text with one request; HTTP errors retain status, headers and body.
 pub async fn export_leads_csv(configuration: &configuration::Configuration, mut params: ExportLeadsParams) -> Result<String, Error<ExportLeadsError>> {
     params.export_leads_request.format = Some(models::export_leads_request::Format::Csv);
     let resp = export_leads_response(configuration, params).await?;
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content = resp.text().await?;
-    if !status.is_success() {
-        let entity: Option<ExportLeadsError> = serde_json::from_str(&content).ok();
-        return Err(Error::ResponseError(ResponseContent { status, headers, content, entity }));
-    }
-    let media_type = headers.get(reqwest::header::CONTENT_TYPE).and_then(|v|v.to_str().ok()).unwrap_or("");
-    if !media_type.split(';').next().unwrap_or("").trim().eq_ignore_ascii_case("text/csv") {
-        return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::InvalidData, "Expected a CSV export response")));
-    }
-    Ok(content)
+    resp.csv()
 }
-async fn export_leads_response(configuration: &configuration::Configuration, params: ExportLeadsParams) -> Result<reqwest::Response, Error<ExportLeadsError>> {
+async fn export_leads_response(configuration: &configuration::Configuration, params: ExportLeadsParams) -> Result<crate::http_policy::BufferedResponse, Error<ExportLeadsError>> {
 
     let uri_str = format!("{}/v1/teams/{teamId}/leads/export", configuration.base_path, teamId=crate::apis::urlencode(params.team_id));
     let mut req_builder = configuration.client.request(reqwest::Method::POST, &uri_str);
@@ -304,7 +233,7 @@ async fn export_leads_response(configuration: &configuration::Configuration, par
     req_builder = req_builder.header(reqwest::header::ACCEPT, accept).json(&params.export_leads_request);
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
     Ok(resp)
 }
 
@@ -328,29 +257,9 @@ pub async fn get_lead(configuration: &configuration::Configuration, params: GetL
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetLeadResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::GetLeadResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<GetLeadError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Lists leads belonging to the authenticated team, with filters, optional grouping and opaque cursors. filters is a JSON-encoded object. nextCursor, nextGroupCursor and lastGroupCursor are null when absent. The handler always returns JSON; use exportLeads for CSV.
@@ -402,29 +311,9 @@ pub async fn list_leads(configuration: &configuration::Configuration, params: Li
     };
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::LeadPage`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::LeadPage`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<ListLeadsError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 
 /// Updates a lead visible to the authenticated team and returns the updated lead envelope. This endpoint uses POST. Missing leads or an update with no changes can return 404; do not automatically replay.
@@ -447,28 +336,8 @@ pub async fn update_lead(configuration: &configuration::Configuration, params: U
     req_builder = req_builder.json(&params.update_lead_request);
 
     let req = req_builder.build()?;
-    let resp = configuration.client.execute(req).await?;
+    let resp = crate::http_policy::execute(configuration, req).await?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
-    let content_type = resp
-        .headers()
-        .get("content-type")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("application/octet-stream");
-    let content_type = super::ContentType::from(content_type);
-
-    if !status.is_client_error() && !status.is_server_error() {
-        let content = resp.text().await?;
-        match content_type {
-            ContentType::Json => serde_path_to_error::deserialize(&mut serde_json::Deserializer::from_str(&content)).map_err(Error::from),
-            ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateLeadResponse`"))),
-            ContentType::Unsupported(unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{unknown_type}` content type response that cannot be converted to `models::UpdateLeadResponse`")))),
-        }
-    } else {
-        let content = resp.text().await?;
-        let entity: Option<UpdateLeadError> = serde_json::from_str(&content).ok();
-        Err(Error::ResponseError(ResponseContent { status, headers, content, entity }))
-    }
+    resp.json()
 }
 

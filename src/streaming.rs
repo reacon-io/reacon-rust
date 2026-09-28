@@ -51,10 +51,7 @@ impl Default for StreamOptions {
 pub struct Reacon { configuration: Configuration }
 impl Reacon {
     pub fn new(api_key: impl Into<String>) -> Result<Self, reqwest::Error> {
-        let client = reqwest::Client::builder().redirect(reqwest::redirect::Policy::none())
-            .retry(reqwest::retry::never()).build()?;
-        let mut configuration = Configuration::new();
-        configuration.client = client;
+        let mut configuration = Configuration::with_client_builder(reqwest::Client::builder())?;
         configuration.api_key = Some(ApiKey { key: api_key.into(), prefix: None });
         Ok(Self { configuration })
     }

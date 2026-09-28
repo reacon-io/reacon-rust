@@ -7,11 +7,15 @@ pub struct ResponseContent<T> {
     /// Response headers, including request identifiers and retry metadata.
     pub headers: reqwest::header::HeaderMap,
     pub content: String,
+    /// Original response bytes; content is a lossy UTF-8 convenience view.
+    pub body: Vec<u8>,
     pub entity: Option<T>,
 }
 
 #[derive(Debug)]
 pub enum Error<T> {
+    Request(crate::http_policy::RequestError),
+    Decode(crate::http_policy::ResponseDecodeError),
     Reqwest(reqwest::Error),
     Serde(serde_json::Error),
     SerdePathToError(serde_path_to_error::Error<serde_json::Error>),
@@ -22,6 +26,8 @@ pub enum Error<T> {
 impl <T> fmt::Display for Error<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (module, e) = match self {
+            Error::Request(e) => ("request", e.to_string()),
+            Error::Decode(e) => ("decode", e.to_string()),
             Error::Reqwest(e) => ("reqwest", e.to_string()),
             Error::Serde(e) => ("serde", e.to_string()),
             Error::SerdePathToError(e) => ("serde", format!("{}: {}", e.path().to_string(), e.inner().to_string())),
@@ -35,6 +41,8 @@ impl <T> fmt::Display for Error<T> {
 impl <T: fmt::Debug> error::Error for Error<T> {
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         Some(match self {
+            Error::Request(e) => e,
+            Error::Decode(e) => e,
             Error::Reqwest(e) => e,
             Error::Serde(e) => e,
             Error::SerdePathToError(e) => e,
@@ -46,7 +54,7 @@ impl <T: fmt::Debug> error::Error for Error<T> {
 
 impl <T> From<reqwest::Error> for Error<T> {
     fn from(e: reqwest::Error) -> Self {
-        Error::Reqwest(e)
+        Error::Reqwest(e.without_url())
     }
 }
 

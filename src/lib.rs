@@ -12,3 +12,6 @@ pub mod models;
 
 pub mod streaming;
 pub use streaming::{Reacon, StreamOptions, StreamError, VerificationEvent, VerificationStream};
+
+pub mod http_policy;
+pub use http_policy::{RequestError, ResponseDecodeError};
