@@ -120,7 +120,7 @@ pub async fn get_domain_company_context(configuration: &configuration::Configura
     resp.json()
 }
 
-/// Returns personal, generic and total email counts for the domain. Authenticate with X-API-Key.
+/// Returns personal, generic and total known email counts for the domain. Authenticate with X-API-Key. This endpoint reports counts only; it does not reveal email addresses. The recorded example uses a reserved example.invalid domain with zero known emails.
 pub async fn get_domain_counts(configuration: &configuration::Configuration, params: GetDomainCountsParams) -> Result<models::DomainCounts, Error<GetDomainCountsError>> {
 
     let uri_str = format!("{}/v1/domains/{domain}/counts", configuration.base_path, domain=crate::apis::urlencode(params.domain));
