@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailCadenceWorkflowExperimentVariant {
+    #[serde(flatten)]
+    pub additional_properties: std::collections::BTreeMap<String, serde_json::Value>,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "name")]
@@ -26,6 +28,7 @@ pub struct MailCadenceWorkflowExperimentVariant {
 impl MailCadenceWorkflowExperimentVariant {
     pub fn new(id: String, name: String, next_node_id: String, weight: f64) -> MailCadenceWorkflowExperimentVariant {
         MailCadenceWorkflowExperimentVariant {
+            additional_properties: Default::default(),
             id,
             name,
             next_node_id,
