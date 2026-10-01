@@ -26,7 +26,7 @@ pub struct MailExperimentReportDecision {
     #[serde(rename = "reason")]
     pub reason: String,
     #[serde(rename = "resultSnapshot")]
-    pub result_snapshot: serde_json::Value,
+    pub result_snapshot: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "revision")]
     pub revision: f64,
     #[serde(rename = "tenantId")]
@@ -36,7 +36,7 @@ pub struct MailExperimentReportDecision {
 }
 
 impl MailExperimentReportDecision {
-    pub fn new(decided_at: String, decided_by_actor_id: String, experiment_key: String, id: String, method: String, reason: String, result_snapshot: serde_json::Value, revision: f64, tenant_id: String, winner_variant_id: String) -> MailExperimentReportDecision {
+    pub fn new(decided_at: String, decided_by_actor_id: String, experiment_key: String, id: String, method: String, reason: String, result_snapshot: std::collections::HashMap<String, serde_json::Value>, revision: f64, tenant_id: String, winner_variant_id: String) -> MailExperimentReportDecision {
         MailExperimentReportDecision {
             decided_at,
             decided_by_actor_id,

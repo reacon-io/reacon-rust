@@ -20,13 +20,13 @@ pub struct MailWebhookEventSnapshot {
     #[serde(rename = "occurredAt")]
     pub occurred_at: String,
     #[serde(rename = "payload")]
-    pub payload: serde_json::Value,
+    pub payload: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "type")]
     pub r#type: String,
 }
 
 impl MailWebhookEventSnapshot {
-    pub fn new(aggregate_id: String, id: String, occurred_at: String, payload: serde_json::Value, r#type: String) -> MailWebhookEventSnapshot {
+    pub fn new(aggregate_id: String, id: String, occurred_at: String, payload: std::collections::HashMap<String, serde_json::Value>, r#type: String) -> MailWebhookEventSnapshot {
         MailWebhookEventSnapshot {
             aggregate_id,
             id,

@@ -16,7 +16,7 @@ pub struct MailExperimentOutcomeRecord {
     #[serde(rename = "experimentKey")]
     pub experiment_key: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "occurredAt")]
     pub occurred_at: String,
     #[serde(rename = "outcome")]
@@ -34,7 +34,7 @@ pub struct MailExperimentOutcomeRecord {
 }
 
 impl MailExperimentOutcomeRecord {
-    pub fn new(experiment_key: String, metadata: serde_json::Value, occurred_at: String, outcome: String, revision: f64, source_id: String, tenant_id: String, unit_id: String, value: f64) -> MailExperimentOutcomeRecord {
+    pub fn new(experiment_key: String, metadata: std::collections::HashMap<String, serde_json::Value>, occurred_at: String, outcome: String, revision: f64, source_id: String, tenant_id: String, unit_id: String, value: f64) -> MailExperimentOutcomeRecord {
         MailExperimentOutcomeRecord {
             experiment_key,
             metadata,

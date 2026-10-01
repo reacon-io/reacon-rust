@@ -22,7 +22,7 @@ pub struct MailMessageVariantInput {
     #[serde(rename = "text")]
     pub text: String,
     #[serde(rename = "variables", skip_serializing_if = "Option::is_none")]
-    pub variables: Option<serde_json::Value>,
+    pub variables: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "weight")]
     pub weight: f64,
 }

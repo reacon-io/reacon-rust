@@ -22,7 +22,7 @@ pub struct MailCrmTimelineEvent {
     #[serde(rename = "occurredAt")]
     pub occurred_at: String,
     #[serde(rename = "payload")]
-    pub payload: serde_json::Value,
+    pub payload: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "tenantId")]
     pub tenant_id: String,
     #[serde(rename = "type")]
@@ -30,7 +30,7 @@ pub struct MailCrmTimelineEvent {
 }
 
 impl MailCrmTimelineEvent {
-    pub fn new(actor_id: String, id: String, occurred_at: String, payload: serde_json::Value, tenant_id: String, r#type: String) -> MailCrmTimelineEvent {
+    pub fn new(actor_id: String, id: String, occurred_at: String, payload: std::collections::HashMap<String, serde_json::Value>, tenant_id: String, r#type: String) -> MailCrmTimelineEvent {
         MailCrmTimelineEvent {
             actor_id,
             contact_id: None,
