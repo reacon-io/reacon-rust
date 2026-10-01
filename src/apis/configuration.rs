@@ -12,7 +12,7 @@
 
 #[derive(Debug, Clone)]
 pub struct Configuration {
-    pub base_path: String,
+    pub(crate) base_path: String,
     pub user_agent: Option<String>,
     pub client: reqwest::Client,
     /// Total network deadline through response body reads; defaults to 30 seconds.
