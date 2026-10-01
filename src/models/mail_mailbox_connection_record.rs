@@ -18,7 +18,7 @@ pub struct MailMailboxConnectionRecord {
     #[serde(rename = "credentialId", skip_serializing_if = "Option::is_none")]
     pub credential_id: Option<String>,
     #[serde(rename = "cursors")]
-    pub cursors: serde_json::Value,
+    pub cursors: std::collections::HashMap<String, models::MailImapCursor>,
     #[serde(rename = "imap", skip_serializing_if = "Option::is_none")]
     pub imap: Option<Box<models::MailStoredImapSettings>>,
     #[serde(rename = "integrationConnectionId")]
@@ -48,7 +48,7 @@ pub struct MailMailboxConnectionRecord {
 }
 
 impl MailMailboxConnectionRecord {
-    pub fn new(created_at: String, cursors: serde_json::Value, integration_connection_id: String, last_verified_at: String, mailbox_id: String, next_poll_at: String, status: String, tenant_id: String, updated_at: String, version: f64) -> MailMailboxConnectionRecord {
+    pub fn new(created_at: String, cursors: std::collections::HashMap<String, models::MailImapCursor>, integration_connection_id: String, last_verified_at: String, mailbox_id: String, next_poll_at: String, status: String, tenant_id: String, updated_at: String, version: f64) -> MailMailboxConnectionRecord {
         MailMailboxConnectionRecord {
             created_at,
             credential_id: None,

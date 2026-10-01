@@ -38,7 +38,7 @@ pub struct MailMessageRecord {
     #[serde(rename = "mailboxId")]
     pub mailbox_id: String,
     #[serde(rename = "metadata")]
-    pub metadata: serde_json::Value,
+    pub metadata: std::collections::HashMap<String, String>,
     #[serde(rename = "nextAttemptAt")]
     pub next_attempt_at: String,
     #[serde(rename = "parentMessageId", skip_serializing_if = "Option::is_none")]
@@ -74,7 +74,7 @@ pub struct MailMessageRecord {
 }
 
 impl MailMessageRecord {
-    pub fn new(attempt_count: f64, bcc: Vec<models::MailMailAddress>, cc: Vec<models::MailMailAddress>, created_at: String, id: String, idempotency_key: String, mailbox_id: String, metadata: serde_json::Value, next_attempt_at: String, policy: models::MailMessagePolicy, rendered: models::MailRenderedMessage, reply_to: models::MailMailAddress, scheduled_at: String, status: String, tenant_id: String, to: Vec<models::MailMailAddress>, updated_at: String, version: f64) -> MailMessageRecord {
+    pub fn new(attempt_count: f64, bcc: Vec<models::MailMailAddress>, cc: Vec<models::MailMailAddress>, created_at: String, id: String, idempotency_key: String, mailbox_id: String, metadata: std::collections::HashMap<String, String>, next_attempt_at: String, policy: models::MailMessagePolicy, rendered: models::MailRenderedMessage, reply_to: models::MailMailAddress, scheduled_at: String, status: String, tenant_id: String, to: Vec<models::MailMailAddress>, updated_at: String, version: f64) -> MailMessageRecord {
         MailMessageRecord {
             accepted_at: None,
             attempt_count,

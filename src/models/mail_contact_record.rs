@@ -16,7 +16,7 @@ pub struct MailContactRecord {
     #[serde(rename = "createdAt")]
     pub created_at: String,
     #[serde(rename = "customFields")]
-    pub custom_fields: serde_json::Value,
+    pub custom_fields: std::collections::HashMap<String, String>,
     #[serde(rename = "email")]
     pub email: String,
     #[serde(rename = "id")]
@@ -30,7 +30,7 @@ pub struct MailContactRecord {
 }
 
 impl MailContactRecord {
-    pub fn new(created_at: String, custom_fields: serde_json::Value, email: String, id: String, tenant_id: String, updated_at: String) -> MailContactRecord {
+    pub fn new(created_at: String, custom_fields: std::collections::HashMap<String, String>, email: String, id: String, tenant_id: String, updated_at: String) -> MailContactRecord {
         MailContactRecord {
             created_at,
             custom_fields,

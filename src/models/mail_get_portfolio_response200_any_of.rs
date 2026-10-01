@@ -16,13 +16,13 @@ pub struct MailGetPortfolioResponse200AnyOf {
     #[serde(rename = "portfolio", deserialize_with = "Option::deserialize")]
     pub portfolio: Option<serde_json::Value>,
     #[serde(rename = "suppressions")]
-    pub suppressions: Vec<serde_json::Value>,
+    pub suppressions: Vec<models::MailMailPortfolioSuppression>,
     #[serde(rename = "teams")]
-    pub teams: Vec<serde_json::Value>,
+    pub teams: Vec<models::MailMailPortfolioTeam>,
 }
 
 impl MailGetPortfolioResponse200AnyOf {
-    pub fn new(portfolio: Option<serde_json::Value>, suppressions: Vec<serde_json::Value>, teams: Vec<serde_json::Value>) -> MailGetPortfolioResponse200AnyOf {
+    pub fn new(portfolio: Option<serde_json::Value>, suppressions: Vec<models::MailMailPortfolioSuppression>, teams: Vec<models::MailMailPortfolioTeam>) -> MailGetPortfolioResponse200AnyOf {
         MailGetPortfolioResponse200AnyOf {
             portfolio,
             suppressions,

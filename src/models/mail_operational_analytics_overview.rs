@@ -16,17 +16,17 @@ pub struct MailOperationalAnalyticsOverview {
     #[serde(rename = "cadenceSteps")]
     pub cadence_steps: Vec<models::MailOperationalAnalyticsOverviewCadenceStepsInner>,
     #[serde(rename = "replyLabels")]
-    pub reply_labels: serde_json::Value,
+    pub reply_labels: std::collections::HashMap<String, f64>,
     #[serde(rename = "sampleLimited")]
     pub sample_limited: bool,
     #[serde(rename = "stages")]
-    pub stages: serde_json::Value,
+    pub stages: std::collections::HashMap<String, f64>,
     #[serde(rename = "taskOutcomes")]
-    pub task_outcomes: serde_json::Value,
+    pub task_outcomes: std::collections::HashMap<String, f64>,
 }
 
 impl MailOperationalAnalyticsOverview {
-    pub fn new(cadence_steps: Vec<models::MailOperationalAnalyticsOverviewCadenceStepsInner>, reply_labels: serde_json::Value, sample_limited: bool, stages: serde_json::Value, task_outcomes: serde_json::Value) -> MailOperationalAnalyticsOverview {
+    pub fn new(cadence_steps: Vec<models::MailOperationalAnalyticsOverviewCadenceStepsInner>, reply_labels: std::collections::HashMap<String, f64>, sample_limited: bool, stages: std::collections::HashMap<String, f64>, task_outcomes: std::collections::HashMap<String, f64>) -> MailOperationalAnalyticsOverview {
         MailOperationalAnalyticsOverview {
             cadence_steps,
             reply_labels,

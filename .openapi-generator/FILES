@@ -269,6 +269,7 @@ src/models/mail_get_tracking_domain_response200.rs
 src/models/mail_get_tracking_domain_response200_domain.rs
 src/models/mail_get_webhooks_response200.rs
 src/models/mail_get_webhooks_response200_subscriptions_inner.rs
+src/models/mail_imap_cursor.rs
 src/models/mail_inbox_message_record.rs
 src/models/mail_mail_address.rs
 src/models/mail_mail_portfolio.rs
@@ -339,8 +340,6 @@ src/models/mail_post_cadences_response200.rs
 src/models/mail_post_campaigns_by_campaign_id_duplicate_response201.rs
 src/models/mail_post_campaigns_by_campaign_id_launch_request.rs
 src/models/mail_post_campaigns_by_campaign_id_launch_response200.rs
-src/models/mail_post_campaigns_by_campaign_id_launch_response200_any_of.rs
-src/models/mail_post_campaigns_by_campaign_id_launch_response200_any_of_1.rs
 src/models/mail_post_campaigns_by_campaign_id_launch_response200_campaign.rs
 src/models/mail_post_campaigns_by_campaign_id_state_request.rs
 src/models/mail_post_campaigns_by_campaign_id_state_response200.rs
