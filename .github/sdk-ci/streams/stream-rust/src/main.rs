@@ -10,8 +10,8 @@ async fn collect(client: &Reacon, scenario: &str, options: StreamOptions) -> Res
 #[tokio::main]
 async fn main() {
     let url = std::env::var("REACON_TEST_URL").unwrap();
-    let client = Reacon::new("synthetic-rust").unwrap().with_base_url(&url);
-    let isolated = Reacon::new("isolated-rust").unwrap().with_base_url(&url);
+    let client = Reacon::new("synthetic-rust").unwrap().with_http_client(reacon_sdk::apis::configuration::Configuration::with_client_builder(fixture_builder(&url, reqwest::Client::builder())).unwrap().client);
+    let isolated = Reacon::new("isolated-rust").unwrap().with_http_client(reacon_sdk::apis::configuration::Configuration::with_client_builder(fixture_builder(&url, reqwest::Client::builder())).unwrap().client);
     drop(client.stream_verification("never@example.test", options())); // not polled, no request
     let (values, isolated_values) = tokio::join!(collect(&client, "success", options()), collect(&isolated, "isolated", options()));
     for values in [values.unwrap(), isolated_values.unwrap()] {
@@ -56,4 +56,20 @@ async fn main() {
     drop(early);
     assert!(reqwest::get(format!("{url}/_assert_closed")).await.unwrap().status().is_success());
     println!("Rust streaming: framing, terminal/error, isolation, timeout, cancellation and early-close assertions passed");
+}
+
+// Test transport: SDK requests retain https://api.reacon.io and normal TLS checks.
+fn fixture_builder(target: &str, builder: reqwest::ClientBuilder) -> reqwest::ClientBuilder {
+    let url = reqwest::Url::parse(target).unwrap();
+    assert!(matches!(url.host_str(), Some("127.0.0.1" | "localhost")));
+    let mut proxy = reqwest::Url::parse(&std::env::var("REACON_FIXTURE_PROXY_ENDPOINT").expect("Fixture proxy required")).unwrap();
+    let alphabet = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+    let mut encoded = String::new();
+    for chunk in target.as_bytes().chunks(3) {
+        let n = (u32::from(chunk[0]) << 16) | (u32::from(*chunk.get(1).unwrap_or(&0)) << 8) | u32::from(*chunk.get(2).unwrap_or(&0));
+        for i in 0..chunk.len()+1 { encoded.push(alphabet[((n >> (18-i*6)) & 63) as usize] as char); }
+    }
+    proxy.set_username(&encoded).unwrap();
+    let builder = builder.proxy(reqwest::Proxy::https(proxy).unwrap());
+    if url.scheme() == "http" { builder.add_root_certificate(reqwest::Certificate::from_pem(std::env::var("REACON_FIXTURE_CA_PEM").unwrap().as_bytes()).unwrap()) } else { builder }
 }

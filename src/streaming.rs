@@ -55,9 +55,6 @@ impl Reacon {
         configuration.api_key = Some(ApiKey { key: api_key.into(), prefix: None });
         Ok(Self { configuration })
     }
-    pub fn with_base_url(mut self, base_url: impl Into<String>) -> Self {
-        self.configuration.base_path = base_url.into().trim_end_matches('/').to_string(); self
-    }
     /// An injected client must preserve no-retry/no-redirect behavior for billed calls.
     pub fn with_http_client(mut self, client: reqwest::Client) -> Self { self.configuration.client = client; self }
     pub fn configuration(&self) -> &Configuration { &self.configuration }
