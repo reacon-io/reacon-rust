@@ -20,7 +20,7 @@ pub struct ApiError {
     #[serde(rename = "error")]
     pub error: String,
     #[serde(rename = "issues", skip_serializing_if = "Option::is_none")]
-    pub issues: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    pub issues: Option<Vec<models::ApiValidationIssue>>,
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     #[serde(rename = "remainingCredits", skip_serializing_if = "Option::is_none")]

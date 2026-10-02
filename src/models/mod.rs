@@ -12,6 +12,8 @@ pub mod api_error;
 pub use self::api_error::ApiError;
 pub mod api_key_identity;
 pub use self::api_key_identity::ApiKeyIdentity;
+pub mod api_validation_issue;
+pub use self::api_validation_issue::ApiValidationIssue;
 pub mod automation_hook_created;
 pub use self::automation_hook_created::AutomationHookCreated;
 pub mod batch_verification_error;
