@@ -27,6 +27,7 @@ src/models/airtable_mapping_options_response_options_tables_inner.rs
 src/models/airtable_mapping_options_response_options_tables_inner_fields_inner.rs
 src/models/api_error.rs
 src/models/api_key_identity.rs
+src/models/api_validation_issue.rs
 src/models/automation_hook_created.rs
 src/models/batch_verification_error.rs
 src/models/batch_verification_item.rs
