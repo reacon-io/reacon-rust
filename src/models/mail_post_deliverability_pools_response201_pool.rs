@@ -18,7 +18,7 @@ pub struct MailPostDeliverabilityPoolsResponse201Pool {
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "members")]
-    pub members: Vec<serde_json::Value>,
+    pub members: Vec<models::MailMailboxPoolMember>,
     #[serde(rename = "name")]
     pub name: String,
     #[serde(rename = "strategy")]
@@ -30,7 +30,7 @@ pub struct MailPostDeliverabilityPoolsResponse201Pool {
 }
 
 impl MailPostDeliverabilityPoolsResponse201Pool {
-    pub fn new(created_at: String, id: String, members: Vec<serde_json::Value>, name: String, strategy: String, tenant_id: String, updated_at: String) -> MailPostDeliverabilityPoolsResponse201Pool {
+    pub fn new(created_at: String, id: String, members: Vec<models::MailMailboxPoolMember>, name: String, strategy: String, tenant_id: String, updated_at: String) -> MailPostDeliverabilityPoolsResponse201Pool {
         MailPostDeliverabilityPoolsResponse201Pool {
             created_at,
             id,
