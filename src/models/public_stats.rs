@@ -13,6 +13,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PublicStats {
+    /// Wire protocol major version, independent of SDK and actions-package versions.
+    #[serde(rename = "apiProtocolVersion", skip_serializing_if = "Option::is_none")]
+    pub api_protocol_version: Option<i32>,
     #[serde(rename = "emails")]
     pub emails: i32,
     #[serde(rename = "mentions")]
@@ -24,6 +27,7 @@ pub struct PublicStats {
 impl PublicStats {
     pub fn new(emails: i32, mentions: i32, version: String) -> PublicStats {
         PublicStats {
+            api_protocol_version: None,
             emails,
             mentions,
             version,
