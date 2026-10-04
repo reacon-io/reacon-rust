@@ -16,13 +16,13 @@ pub struct MailPostPortfolioResponse200 {
     #[serde(rename = "portfolio")]
     pub portfolio: Box<models::MailMailPortfolio>,
     #[serde(rename = "suppressions")]
-    pub suppressions: Vec<serde_json::Value>,
+    pub suppressions: Vec<models::MailMailPortfolioSuppression>,
     #[serde(rename = "teams")]
     pub teams: Vec<models::MailMailPortfolioTeam>,
 }
 
 impl MailPostPortfolioResponse200 {
-    pub fn new(portfolio: models::MailMailPortfolio, suppressions: Vec<serde_json::Value>, teams: Vec<models::MailMailPortfolioTeam>) -> MailPostPortfolioResponse200 {
+    pub fn new(portfolio: models::MailMailPortfolio, suppressions: Vec<models::MailMailPortfolioSuppression>, teams: Vec<models::MailMailPortfolioTeam>) -> MailPostPortfolioResponse200 {
         MailPostPortfolioResponse200 {
             portfolio: Box::new(portfolio),
             suppressions,
