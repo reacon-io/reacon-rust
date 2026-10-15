@@ -448,7 +448,10 @@ pub struct ListMailMailboxesParams {
 pub struct ListMailMessagesParams {
     pub team_id: String,
     pub limit: Option<i32>,
-    pub cursor: Option<String>
+    pub cursor: Option<String>,
+    pub query: Option<String>,
+    pub status: Option<String>,
+    pub sequence_id: Option<String>
 }
 
 /// struct for passing parameters to the method [`list_mail_reply_automations`]
@@ -3694,6 +3697,15 @@ pub async fn list_mail_messages(configuration: &configuration::Configuration, pa
     }
     if let Some(ref param_value) = params.cursor {
         req_builder = req_builder.query(&[("cursor", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = params.query {
+        req_builder = req_builder.query(&[("query", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = params.status {
+        req_builder = req_builder.query(&[("status", &param_value.to_string())]);
+    }
+    if let Some(ref param_value) = params.sequence_id {
+        req_builder = req_builder.query(&[("sequenceId", &param_value.to_string())]);
     }
     if let Some(ref user_agent) = configuration.user_agent {
         req_builder = req_builder.header(reqwest::header::USER_AGENT, user_agent.clone());

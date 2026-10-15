@@ -13,6 +13,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailPostCadencesRequest {
+    #[serde(rename = "emailExcludedContactIds", skip_serializing_if = "Option::is_none")]
+    pub email_excluded_contact_ids: Option<Vec<uuid::Uuid>>,
+    #[serde(rename = "emailRecipientOverrides", skip_serializing_if = "Option::is_none")]
+    pub email_recipient_overrides: Option<Vec<models::MailPostCadencesRequestEmailRecipientOverridesInner>>,
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(rename = "name")]
@@ -28,6 +32,8 @@ pub struct MailPostCadencesRequest {
 impl MailPostCadencesRequest {
     pub fn new(name: String, nodes: Vec<models::MailPostCadencesRequestNodesInner>, status: Status) -> MailPostCadencesRequest {
         MailPostCadencesRequest {
+            email_excluded_contact_ids: None,
+            email_recipient_overrides: None,
             id: None,
             name,
             nodes,

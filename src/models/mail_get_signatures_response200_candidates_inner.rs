@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct MailSignatureCandidate {
+pub struct MailGetSignaturesResponse200CandidatesInner {
     #[serde(rename = "confidence")]
     pub confidence: f64,
     #[serde(rename = "createdAt")]
@@ -20,7 +20,7 @@ pub struct MailSignatureCandidate {
     #[serde(rename = "extractorVersion")]
     pub extractor_version: String,
     #[serde(rename = "fields")]
-    pub fields: Box<models::MailSignatureCandidateFields>,
+    pub fields: Box<models::MailGetSignaturesResponse200CandidatesInnerFields>,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "signatureFingerprint")]
@@ -37,9 +37,9 @@ pub struct MailSignatureCandidate {
     pub tenant_id: String,
 }
 
-impl MailSignatureCandidate {
-    pub fn new(confidence: f64, created_at: String, extractor_version: String, fields: models::MailSignatureCandidateFields, id: String, signature_fingerprint: String, signature_text: String, signature_text_hash: String, source_message_id: String, status: String, tenant_id: String) -> MailSignatureCandidate {
-        MailSignatureCandidate {
+impl MailGetSignaturesResponse200CandidatesInner {
+    pub fn new(confidence: f64, created_at: String, extractor_version: String, fields: models::MailGetSignaturesResponse200CandidatesInnerFields, id: String, signature_fingerprint: String, signature_text: String, signature_text_hash: String, source_message_id: String, status: String, tenant_id: String) -> MailGetSignaturesResponse200CandidatesInner {
+        MailGetSignaturesResponse200CandidatesInner {
             confidence,
             created_at,
             extractor_version,

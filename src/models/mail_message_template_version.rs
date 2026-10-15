@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailMessageTemplateVersion {
+    #[serde(rename = "attachments", skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<models::MailEmailAssetReference>>,
     #[serde(rename = "body")]
     pub body: String,
     #[serde(rename = "channel")]
@@ -42,6 +44,7 @@ pub struct MailMessageTemplateVersion {
 impl MailMessageTemplateVersion {
     pub fn new(body: String, channel: String, created_at: String, created_by_actor_id: String, id: String, name: String, status: String, tenant_id: String, variables: Vec<String>, version: f64) -> MailMessageTemplateVersion {
         MailMessageTemplateVersion {
+            attachments: None,
             body,
             channel,
             created_at,

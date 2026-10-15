@@ -16,12 +16,18 @@ pub struct ProductSavedSearchesListOutput {
     /// Currently always empty.
     #[serde(rename = "items")]
     pub items: Vec<serde_json::Value>,
+    #[serde(rename = "reason")]
+    pub reason: String,
+    #[serde(rename = "supported")]
+    pub supported: bool,
 }
 
 impl ProductSavedSearchesListOutput {
-    pub fn new(items: Vec<serde_json::Value>) -> ProductSavedSearchesListOutput {
+    pub fn new(items: Vec<serde_json::Value>, reason: String, supported: bool) -> ProductSavedSearchesListOutput {
         ProductSavedSearchesListOutput {
             items,
+            reason,
+            supported,
         }
     }
 }

@@ -13,10 +13,20 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailCadenceDefinition {
+    #[serde(rename = "authoringRevision", skip_serializing_if = "Option::is_none")]
+    pub authoring_revision: Option<f64>,
     #[serde(rename = "createdAt")]
     pub created_at: String,
     #[serde(rename = "createdByActorId")]
     pub created_by_actor_id: String,
+    #[serde(rename = "emailDelivery", skip_serializing_if = "Option::is_none")]
+    pub email_delivery: Option<Box<models::MailEmailSequenceDeliverySettings>>,
+    #[serde(rename = "emailExcludedContactIds", skip_serializing_if = "Option::is_none")]
+    pub email_excluded_contact_ids: Option<Vec<String>>,
+    #[serde(rename = "emailRecipientOverrides", skip_serializing_if = "Option::is_none")]
+    pub email_recipient_overrides: Option<Vec<models::MailEmailSequenceRecipientOverride>>,
+    #[serde(rename = "emailRenderSeed", skip_serializing_if = "Option::is_none")]
+    pub email_render_seed: Option<String>,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "name")]
@@ -36,8 +46,13 @@ pub struct MailCadenceDefinition {
 impl MailCadenceDefinition {
     pub fn new(created_at: String, created_by_actor_id: String, id: String, name: String, nodes: Vec<models::MailCadenceNode>, status: String, tenant_id: String, version: f64) -> MailCadenceDefinition {
         MailCadenceDefinition {
+            authoring_revision: None,
             created_at,
             created_by_actor_id,
+            email_delivery: None,
+            email_excluded_contact_ids: None,
+            email_recipient_overrides: None,
+            email_render_seed: None,
             id,
             name,
             nodes,

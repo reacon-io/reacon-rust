@@ -14,13 +14,19 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ProductSequenceRecipientsListInput {
+    #[serde(rename = "limit", skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i32>,
+    #[serde(rename = "offset", skip_serializing_if = "Option::is_none")]
+    pub offset: Option<i32>,
     #[serde(rename = "sequenceId")]
-    pub sequence_id: uuid::Uuid,
+    pub sequence_id: String,
 }
 
 impl ProductSequenceRecipientsListInput {
-    pub fn new(sequence_id: uuid::Uuid) -> ProductSequenceRecipientsListInput {
+    pub fn new(sequence_id: String) -> ProductSequenceRecipientsListInput {
         ProductSequenceRecipientsListInput {
+            limit: None,
+            offset: None,
             sequence_id,
         }
     }

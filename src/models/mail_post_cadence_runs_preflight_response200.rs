@@ -19,6 +19,8 @@ pub struct MailPostCadenceRunsPreflightResponse200 {
     pub cadence_id: String,
     #[serde(rename = "cadenceVersion")]
     pub cadence_version: f64,
+    #[serde(rename = "eligibility", skip_serializing_if = "Option::is_none")]
+    pub eligibility: Option<Box<models::MailRecipientEligibilitySummary>>,
     #[serde(rename = "missingVariables")]
     pub missing_variables: Vec<models::MailCadenceEnrollmentVariableGap>,
     #[serde(rename = "ready")]
@@ -35,6 +37,7 @@ impl MailPostCadenceRunsPreflightResponse200 {
             audience_count,
             cadence_id,
             cadence_version,
+            eligibility: None,
             missing_variables,
             ready,
             required_variables,

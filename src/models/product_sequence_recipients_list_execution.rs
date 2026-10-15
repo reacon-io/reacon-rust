@@ -15,8 +15,9 @@ use serde::{Deserialize, Serialize};
 pub struct ProductSequenceRecipientsListExecution {
     #[serde(rename = "executionId", deserialize_with = "Option::deserialize")]
     pub execution_id: Option<String>,
+    /// Response body of the Mail API operation GET /v1/teams/{teamId}/mail/cadence-recipients, returned unchanged.
     #[serde(rename = "output")]
-    pub output: Box<models::ProductSequenceRecipientsListOutput>,
+    pub output: std::collections::HashMap<String, serde_json::Value>,
     #[serde(rename = "replay")]
     pub replay: bool,
     #[serde(rename = "tool")]
@@ -24,10 +25,10 @@ pub struct ProductSequenceRecipientsListExecution {
 }
 
 impl ProductSequenceRecipientsListExecution {
-    pub fn new(execution_id: Option<String>, output: models::ProductSequenceRecipientsListOutput, replay: bool, tool: Tool) -> ProductSequenceRecipientsListExecution {
+    pub fn new(execution_id: Option<String>, output: std::collections::HashMap<String, serde_json::Value>, replay: bool, tool: Tool) -> ProductSequenceRecipientsListExecution {
         ProductSequenceRecipientsListExecution {
             execution_id,
-            output: Box::new(output),
+            output,
             replay,
             tool,
         }

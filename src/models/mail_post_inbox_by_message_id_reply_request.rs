@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 pub struct MailPostInboxByMessageIdReplyRequest {
     #[serde(rename = "clientRequestId")]
     pub client_request_id: String,
+    #[serde(rename = "draftRevision", skip_serializing_if = "Option::is_none")]
+    pub draft_revision: Option<i32>,
     #[serde(rename = "text")]
     pub text: String,
 }
@@ -23,6 +25,7 @@ impl MailPostInboxByMessageIdReplyRequest {
     pub fn new(client_request_id: String, text: String) -> MailPostInboxByMessageIdReplyRequest {
         MailPostInboxByMessageIdReplyRequest {
             client_request_id,
+            draft_revision: None,
             text,
         }
     }

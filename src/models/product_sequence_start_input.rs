@@ -14,18 +14,54 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ProductSequenceStartInput {
+    #[serde(rename = "audienceListId")]
+    pub audience_list_id: String,
+    #[serde(rename = "cadenceId")]
+    pub cadence_id: String,
+    #[serde(rename = "cadenceVersion")]
+    pub cadence_version: i32,
+    #[serde(rename = "enrollmentMode", skip_serializing_if = "Option::is_none")]
+    pub enrollment_mode: Option<EnrollmentMode>,
     #[serde(rename = "idempotencyKey")]
     pub idempotency_key: String,
-    #[serde(rename = "sequenceId")]
-    pub sequence_id: uuid::Uuid,
+    #[serde(rename = "mailboxId", skip_serializing_if = "Option::is_none")]
+    pub mailbox_id: Option<String>,
+    #[serde(rename = "mailboxPoolId", skip_serializing_if = "Option::is_none")]
+    pub mailbox_pool_id: Option<String>,
+    /// The server applies trim before validating {\"type\":\"string\",\"minLength\":1,\"maxLength\":200}.
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "scheduledAt", skip_serializing_if = "Option::is_none")]
+    pub scheduled_at: Option<String>,
 }
 
 impl ProductSequenceStartInput {
-    pub fn new(idempotency_key: String, sequence_id: uuid::Uuid) -> ProductSequenceStartInput {
+    pub fn new(audience_list_id: String, cadence_id: String, cadence_version: i32, idempotency_key: String, name: String) -> ProductSequenceStartInput {
         ProductSequenceStartInput {
+            audience_list_id,
+            cadence_id,
+            cadence_version,
+            enrollment_mode: None,
             idempotency_key,
-            sequence_id,
+            mailbox_id: None,
+            mailbox_pool_id: None,
+            name,
+            scheduled_at: None,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum EnrollmentMode {
+    #[serde(rename = "new_only")]
+    NewOnly,
+    #[serde(rename = "reenroll")]
+    Reenroll,
+}
+
+impl Default for EnrollmentMode {
+    fn default() -> EnrollmentMode {
+        Self::NewOnly
     }
 }
 

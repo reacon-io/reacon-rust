@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailRenderedMessage {
+    #[serde(rename = "attachments", skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<models::MailMailAttachmentReference>>,
     #[serde(rename = "html", skip_serializing_if = "Option::is_none")]
     pub html: Option<String>,
     #[serde(rename = "subject")]
@@ -24,6 +26,7 @@ pub struct MailRenderedMessage {
 impl MailRenderedMessage {
     pub fn new(subject: String, text: String) -> MailRenderedMessage {
         MailRenderedMessage {
+            attachments: None,
             html: None,
             subject,
             text,

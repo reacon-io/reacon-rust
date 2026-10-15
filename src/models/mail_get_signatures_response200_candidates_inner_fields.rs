@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct MailSignatureCandidateFields {
+pub struct MailGetSignaturesResponse200CandidatesInnerFields {
     #[serde(rename = "address", skip_serializing_if = "Option::is_none")]
     pub address: Option<Box<models::MailEvidenceField>>,
     #[serde(rename = "company", skip_serializing_if = "Option::is_none")]
@@ -24,16 +24,16 @@ pub struct MailSignatureCandidateFields {
     #[serde(rename = "personName", skip_serializing_if = "Option::is_none")]
     pub person_name: Option<Box<models::MailEvidenceField>>,
     #[serde(rename = "phones")]
-    pub phones: Vec<models::MailSignatureCandidateFieldsPhonesInner>,
+    pub phones: Vec<models::MailGetSignaturesResponse200CandidatesInnerFieldsPhonesInner>,
     #[serde(rename = "socialProfiles")]
     pub social_profiles: Vec<models::MailEvidenceField>,
     #[serde(rename = "websites")]
     pub websites: Vec<models::MailEvidenceField>,
 }
 
-impl MailSignatureCandidateFields {
-    pub fn new(emails: Vec<models::MailEvidenceField>, phones: Vec<models::MailSignatureCandidateFieldsPhonesInner>, social_profiles: Vec<models::MailEvidenceField>, websites: Vec<models::MailEvidenceField>) -> MailSignatureCandidateFields {
-        MailSignatureCandidateFields {
+impl MailGetSignaturesResponse200CandidatesInnerFields {
+    pub fn new(emails: Vec<models::MailEvidenceField>, phones: Vec<models::MailGetSignaturesResponse200CandidatesInnerFieldsPhonesInner>, social_profiles: Vec<models::MailEvidenceField>, websites: Vec<models::MailEvidenceField>) -> MailGetSignaturesResponse200CandidatesInnerFields {
+        MailGetSignaturesResponse200CandidatesInnerFields {
             address: None,
             company: None,
             emails,
