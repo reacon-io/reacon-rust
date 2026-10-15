@@ -14,13 +14,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MailGetSignaturesResponse200 {
     #[serde(rename = "candidates")]
-    pub candidates: Vec<models::MailSignatureCandidate>,
+    pub candidates: Vec<models::MailGetSignaturesResponse200CandidatesInner>,
     #[serde(rename = "nextCursor", skip_serializing_if = "Option::is_none")]
     pub next_cursor: Option<String>,
 }
 
 impl MailGetSignaturesResponse200 {
-    pub fn new(candidates: Vec<models::MailSignatureCandidate>) -> MailGetSignaturesResponse200 {
+    pub fn new(candidates: Vec<models::MailGetSignaturesResponse200CandidatesInner>) -> MailGetSignaturesResponse200 {
         MailGetSignaturesResponse200 {
             candidates,
             next_cursor: None,

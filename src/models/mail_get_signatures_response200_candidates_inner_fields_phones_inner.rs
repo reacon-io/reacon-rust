@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct MailSignatureCandidateFieldsPhonesInner {
+pub struct MailGetSignaturesResponse200CandidatesInnerFieldsPhonesInner {
     #[serde(rename = "confidence")]
     pub confidence: f64,
     #[serde(rename = "method")]
@@ -27,9 +27,9 @@ pub struct MailSignatureCandidateFieldsPhonesInner {
     pub value: Box<models::MailPhoneNumberValue>,
 }
 
-impl MailSignatureCandidateFieldsPhonesInner {
-    pub fn new(confidence: f64, method: String, normalized_value: models::MailPhoneNumberValue, source_end: f64, source_start: f64, value: models::MailPhoneNumberValue) -> MailSignatureCandidateFieldsPhonesInner {
-        MailSignatureCandidateFieldsPhonesInner {
+impl MailGetSignaturesResponse200CandidatesInnerFieldsPhonesInner {
+    pub fn new(confidence: f64, method: String, normalized_value: models::MailPhoneNumberValue, source_end: f64, source_start: f64, value: models::MailPhoneNumberValue) -> MailGetSignaturesResponse200CandidatesInnerFieldsPhonesInner {
+        MailGetSignaturesResponse200CandidatesInnerFieldsPhonesInner {
             confidence,
             method,
             normalized_value: Box::new(normalized_value),

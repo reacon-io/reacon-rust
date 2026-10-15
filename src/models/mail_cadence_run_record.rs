@@ -51,6 +51,8 @@ pub struct MailCadenceRunRecord {
     pub lease_owner: Option<String>,
     #[serde(rename = "mailboxId")]
     pub mailbox_id: String,
+    #[serde(rename = "messageEditRevision", skip_serializing_if = "Option::is_none")]
+    pub message_edit_revision: Option<f64>,
     #[serde(rename = "outcome", skip_serializing_if = "Option::is_none")]
     pub outcome: Option<String>,
     #[serde(rename = "pendingMessageId", skip_serializing_if = "Option::is_none")]
@@ -91,6 +93,7 @@ impl MailCadenceRunRecord {
             lease_expires_at: None,
             lease_owner: None,
             mailbox_id,
+            message_edit_revision: None,
             outcome: None,
             pending_message_id: None,
             pending_next_node_id: None,

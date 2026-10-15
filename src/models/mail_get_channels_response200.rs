@@ -21,15 +21,18 @@ pub struct MailGetChannelsResponse200 {
     pub sms: Box<models::MailGetChannelsResponse200Sms>,
     #[serde(rename = "whatsapp")]
     pub whatsapp: Box<models::MailGetChannelsResponse200Whatsapp>,
+    #[serde(rename = "worker")]
+    pub worker: Box<models::MailMailExecutionWorkerStatus>,
 }
 
 impl MailGetChannelsResponse200 {
-    pub fn new(email: models::MailGetChannelsResponse200Email, execution: models::MailGetChannelsResponse200Execution, sms: models::MailGetChannelsResponse200Sms, whatsapp: models::MailGetChannelsResponse200Whatsapp) -> MailGetChannelsResponse200 {
+    pub fn new(email: models::MailGetChannelsResponse200Email, execution: models::MailGetChannelsResponse200Execution, sms: models::MailGetChannelsResponse200Sms, whatsapp: models::MailGetChannelsResponse200Whatsapp, worker: models::MailMailExecutionWorkerStatus) -> MailGetChannelsResponse200 {
         MailGetChannelsResponse200 {
             email: Box::new(email),
             execution: Box::new(execution),
             sms: Box::new(sms),
             whatsapp: Box::new(whatsapp),
+            worker: Box::new(worker),
         }
     }
 }

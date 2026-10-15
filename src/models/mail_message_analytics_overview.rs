@@ -31,8 +31,13 @@ pub struct MailMessageAnalyticsOverview {
     pub from: String,
     #[serde(rename = "mailboxes")]
     pub mailboxes: Vec<models::MailMessageAnalyticsOverviewMailboxesInner>,
+    #[serde(rename = "recipients", skip_serializing_if = "Option::is_none")]
+    pub recipients: Option<Box<models::MailRecipientEngagement>>,
+    /// Legacy message-based rate, retained for API compatibility.
     #[serde(rename = "replyRate")]
     pub reply_rate: f64,
+    #[serde(rename = "sequences", skip_serializing_if = "Option::is_none")]
+    pub sequences: Option<Vec<models::MailSequenceRecipientEngagement>>,
     #[serde(rename = "to")]
     pub to: String,
     #[serde(rename = "total")]
@@ -53,7 +58,9 @@ impl MailMessageAnalyticsOverview {
             delivery_rate,
             from,
             mailboxes,
+            recipients: None,
             reply_rate,
+            sequences: None,
             to,
             total,
             variants,

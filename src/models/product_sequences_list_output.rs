@@ -13,15 +13,39 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ProductSequencesListOutput {
+    #[serde(rename = "cadences")]
+    pub cadences: Vec<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "campaigns")]
+    pub campaigns: Vec<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "drafts")]
+    pub drafts: Vec<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "items")]
-    pub items: Vec<models::ProductSequence>,
+    pub items: Vec<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "source")]
+    pub source: Source,
 }
 
 impl ProductSequencesListOutput {
-    pub fn new(items: Vec<models::ProductSequence>) -> ProductSequencesListOutput {
+    pub fn new(cadences: Vec<std::collections::HashMap<String, serde_json::Value>>, campaigns: Vec<std::collections::HashMap<String, serde_json::Value>>, drafts: Vec<std::collections::HashMap<String, serde_json::Value>>, items: Vec<std::collections::HashMap<String, serde_json::Value>>, source: Source) -> ProductSequencesListOutput {
         ProductSequencesListOutput {
+            cadences,
+            campaigns,
+            drafts,
             items,
+            source,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum Source {
+    #[serde(rename = "canonical_mail")]
+    CanonicalMail,
+}
+
+impl Default for Source {
+    fn default() -> Source {
+        Self::CanonicalMail
     }
 }
 

@@ -98,6 +98,28 @@ pub enum ProductToolExecution {
     SequenceRecipientCancel(Box<models::ProductSequenceRecipientCancelExecution>),
     #[serde(rename="sequence_start")]
     SequenceStart(Box<models::ProductSequenceStartExecution>),
+    #[serde(rename="mail_sequence_drafts_list")]
+    MailSequenceDraftsList(Box<models::ProductMailSequenceDraftsListExecution>),
+    #[serde(rename="mail_sequence_draft_save")]
+    MailSequenceDraftSave(Box<models::ProductMailSequenceDraftSaveExecution>),
+    #[serde(rename="mail_sequence_add_audience")]
+    MailSequenceAddAudience(Box<models::ProductMailSequenceAddAudienceExecution>),
+    #[serde(rename="mail_sequence_readiness")]
+    MailSequenceReadiness(Box<models::ProductMailSequenceReadinessExecution>),
+    #[serde(rename="mail_sequence_publish")]
+    MailSequencePublish(Box<models::ProductMailSequencePublishExecution>),
+    #[serde(rename="mail_sequence_launch")]
+    MailSequenceLaunch(Box<models::ProductMailSequenceLaunchExecution>),
+    #[serde(rename="mail_sequence_campaigns_list")]
+    MailSequenceCampaignsList(Box<models::ProductMailSequenceCampaignsListExecution>),
+    #[serde(rename="mail_sequence_recipients_list")]
+    MailSequenceRecipientsList(Box<models::ProductMailSequenceRecipientsListExecution>),
+    #[serde(rename="mail_sequence_add_ab")]
+    MailSequenceAddAb(Box<models::ProductMailSequenceAddAbExecution>),
+    #[serde(rename="mail_sequence_state")]
+    MailSequenceState(Box<models::ProductMailSequenceStateExecution>),
+    #[serde(rename="mail_sequence_results")]
+    MailSequenceResults(Box<models::ProductMailSequenceResultsExecution>),
     #[serde(rename="account_info")]
     AccountInfo(Box<models::ProductAccountInfoExecution>),
     #[serde(rename="usage")]

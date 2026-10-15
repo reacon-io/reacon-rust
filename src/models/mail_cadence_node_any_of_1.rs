@@ -19,6 +19,8 @@ pub struct MailCadenceNodeAnyOf1 {
     pub name: String,
     #[serde(rename = "channel")]
     pub channel: String,
+    #[serde(rename = "emailThread", skip_serializing_if = "Option::is_none")]
+    pub email_thread: Option<String>,
     #[serde(rename = "experiment", skip_serializing_if = "Option::is_none")]
     pub experiment: Option<Box<models::MailCadenceMessageExperiment>>,
     #[serde(rename = "kind")]
@@ -37,6 +39,7 @@ impl MailCadenceNodeAnyOf1 {
             id,
             name,
             channel,
+            email_thread: None,
             experiment: None,
             kind,
             next_node_id,

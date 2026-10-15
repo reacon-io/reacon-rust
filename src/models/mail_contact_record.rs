@@ -27,6 +27,8 @@ pub struct MailContactRecord {
     pub tenant_id: String,
     #[serde(rename = "updatedAt")]
     pub updated_at: String,
+    #[serde(rename = "verification", skip_serializing_if = "Option::is_none")]
+    pub verification: Option<Box<models::MailContactRecordVerification>>,
 }
 
 impl MailContactRecord {
@@ -39,6 +41,7 @@ impl MailContactRecord {
             name: None,
             tenant_id,
             updated_at,
+            verification: None,
         }
     }
 }

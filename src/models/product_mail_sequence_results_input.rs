@@ -12,15 +12,16 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct ProductSequenceRecipientsListOutput {
-    #[serde(rename = "items")]
-    pub items: Vec<models::ProductDatedRecipient>,
+#[serde(deny_unknown_fields)]
+pub struct ProductMailSequenceResultsInput {
+    #[serde(rename = "campaignId")]
+    pub campaign_id: String,
 }
 
-impl ProductSequenceRecipientsListOutput {
-    pub fn new(items: Vec<models::ProductDatedRecipient>) -> ProductSequenceRecipientsListOutput {
-        ProductSequenceRecipientsListOutput {
-            items,
+impl ProductMailSequenceResultsInput {
+    pub fn new(campaign_id: String) -> ProductMailSequenceResultsInput {
+        ProductMailSequenceResultsInput {
+            campaign_id,
         }
     }
 }

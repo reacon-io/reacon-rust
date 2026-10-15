@@ -17,6 +17,8 @@ pub struct MailCadenceCampaignRecord {
     pub activated_at: Option<String>,
     #[serde(rename = "actorId")]
     pub actor_id: String,
+    #[serde(rename = "archivedAt", skip_serializing_if = "Option::is_none")]
+    pub archived_at: Option<String>,
     #[serde(rename = "attemptCount")]
     pub attempt_count: f64,
     #[serde(rename = "audienceCount")]
@@ -78,6 +80,7 @@ impl MailCadenceCampaignRecord {
         MailCadenceCampaignRecord {
             activated_at: None,
             actor_id,
+            archived_at: None,
             attempt_count,
             audience_count,
             audience_list_id,
